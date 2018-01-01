@@ -10,6 +10,8 @@ public class Route {
     
     private volatile int countOfSoldTicket;
     
+    private volatile int countOfVisitor;
+    
     public Route(final int routeId,
         final int countOfStation,
         final int countOfCoach,
@@ -21,6 +23,7 @@ public class Route {
         this.countOfCoach = countOfCoach;
         
         this.countOfSoldTicket = 0;
+        this.countOfVisitor = 0;
         
         this.allCoach = new Coach[countOfCoach];
         for (int i = 0; i < countOfCoach; i++) {
@@ -42,9 +45,19 @@ public class Route {
         Ticket ticket = null;
         CoachIdAndSeatId result = null;
         
+<<<<<<< HEAD
+        // We will let visitors go to different coachs.
+        int i = 0;
+        int j = countOfVisitor % this.countOfCoach;
+        this.countOfVisitor++;
+        while (i < countOfCoach) {
+            result = this.allCoach[j].tryModifySeatState(departure, arrival, 0, 0);
+            
+=======
         int i = 0;
         while (i < countOfCoach) {
             result = this.allCoach[i].tryModifySeatState(departure, arrival, 0, 0);
+>>>>>>> cb1b5ccd3e277e177043d1872d463557debd8eb3
             if (result != null) {
                 this.countOfSoldTicket += 1;
                 // Create a ticket.
@@ -60,6 +73,10 @@ public class Route {
             }
             
             i++;
+<<<<<<< HEAD
+            j = (j + 1) % this.countOfCoach;
+=======
+>>>>>>> cb1b5ccd3e277e177043d1872d463557debd8eb3
         }
                 
         return ticket;

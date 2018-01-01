@@ -15,8 +15,13 @@ public class Seat {
         this.seatId = seatId;
         this.stateOfPeace = new boolean[countOfPeace];
         this.lockState = new Object();
+<<<<<<< HEAD
+        
+        this.countOfSold = 0;
+=======
         // this.countOfSold = 0;
         
+>>>>>>> cb1b5ccd3e277e177043d1872d463557debd8eb3
         // Java will initialize the defaule value (false) of "stateOfPeace",
         // but we will do it (true) in the right direction.
         for (int i = 0; i < countOfPeace; i++) {
@@ -91,20 +96,29 @@ public class Seat {
         
         boolean result = true;
         int _seatId = -1;
+<<<<<<< HEAD
+        
+        for (int i = departure - 1; i < arrival - 1; i++) {
+            result = result && this.stateOfPeace[i];
+        }
+        if (result == true) {
+=======
         try {
             this.isBusy = true;
+>>>>>>> cb1b5ccd3e277e177043d1872d463557debd8eb3
             for (int i = departure - 1; i < arrival - 1; i++) {
-                result = result && this.stateOfPeace[i];
+                this.stateOfPeace[i] = false;
             }
-            if (result == true) {
-                for (int i = departure - 1; i < arrival - 1; i++) {
-                    this.stateOfPeace[i] = false;
-                }
-            }
+<<<<<<< HEAD
+        }
+        
+        return result ? this.seatId : _seatId;
+=======
         } finally {
             this.isBusy = false;
             return result ? this.seatId : _seatId;
         }
+>>>>>>> cb1b5ccd3e277e177043d1872d463557debd8eb3
     }
     
     private int tryRefundTick(final int departure, final int arrival) {
