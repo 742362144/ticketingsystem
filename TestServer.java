@@ -11,7 +11,7 @@ package ticketingsystem;
 import java.util.*;
 import java.util.Date;
     
-public class Test {
+public class TestServer {
 
 	public static void main(String[] args) throws InterruptedException {
             

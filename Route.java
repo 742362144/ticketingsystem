@@ -1,5 +1,7 @@
 package ticketingsystem;
 
+import java.util.*;
+
 public class Route {
     private final int routeId;
     private final int countOfStation;
@@ -10,7 +12,7 @@ public class Route {
     
     private volatile int countOfSoldTicket;
     
-    private volatile int countOfVisitor;
+    private volatile int countOfVisitor = 0;
     
     public Route(final int routeId,
         final int countOfStation,
@@ -23,7 +25,6 @@ public class Route {
         this.countOfCoach = countOfCoach;
         
         this.countOfSoldTicket = 0;
-        this.countOfVisitor = 0;
         
         this.allCoach = new Coach[countOfCoach];
         for (int i = 0; i < countOfCoach; i++) {
@@ -45,11 +46,13 @@ public class Route {
         Ticket ticket = null;
         CoachIdAndSeatId result = null;
         
+        // Random rand = new Random();
         int i = 0;
+        // int j = rand.nextInt(this.countOfCoach);
         int j = this.countOfVisitor % this.countOfCoach;
         this.countOfVisitor++;
         while (i < this.countOfCoach) {
-            result = this.allCoach[i].tryModifySeatState(departure, arrival, 0, 0);
+            result = this.allCoach[j].trySeal(departure, arrival);
             if (result != null) {
                 this.countOfSoldTicket += 1;
                 // Create a ticket.
@@ -73,7 +76,7 @@ public class Route {
     
     public boolean tryRefund(final int coachId, final int seatId, final int departure, final int arrival) {
         
-        this.allCoach[coachId - 1].tryModifySeatState(departure, arrival, 1, seatId);
+        this.allCoach[coachId - 1].tryRefund(departure, arrival, seatId);
         return true;
     }
 }
