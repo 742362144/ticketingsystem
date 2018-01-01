@@ -45,19 +45,11 @@ public class Route {
         Ticket ticket = null;
         CoachIdAndSeatId result = null;
         
-<<<<<<< HEAD
-        // We will let visitors go to different coachs.
         int i = 0;
-        int j = countOfVisitor % this.countOfCoach;
+        int j = this.countOfVisitor % this.countOfCoach;
         this.countOfVisitor++;
-        while (i < countOfCoach) {
-            result = this.allCoach[j].tryModifySeatState(departure, arrival, 0, 0);
-            
-=======
-        int i = 0;
-        while (i < countOfCoach) {
+        while (i < this.countOfCoach) {
             result = this.allCoach[i].tryModifySeatState(departure, arrival, 0, 0);
->>>>>>> cb1b5ccd3e277e177043d1872d463557debd8eb3
             if (result != null) {
                 this.countOfSoldTicket += 1;
                 // Create a ticket.
@@ -73,10 +65,7 @@ public class Route {
             }
             
             i++;
-<<<<<<< HEAD
             j = (j + 1) % this.countOfCoach;
-=======
->>>>>>> cb1b5ccd3e277e177043d1872d463557debd8eb3
         }
                 
         return ticket;

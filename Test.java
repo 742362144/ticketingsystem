@@ -23,7 +23,7 @@ public class Test {
         final int stationnum = 10;
         
         // Data are used to test system performance.
-        final int testnum = 10000;
+        final int testnum = 1000000;
         // 10% asking is refunding tickets.
         final int refpc = 10;
         // 30% asking is buying tickets.

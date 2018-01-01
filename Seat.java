@@ -7,21 +7,14 @@ public class Seat {
     private boolean[] stateOfPeace;
     
     private final Object lockState;
-    // private volatile int countOfSold;
-    public boolean isBusy = false;
+    private volatile int countOfSold;
     
     public Seat(final int seatId, final int countOfPeace) {
         
         this.seatId = seatId;
         this.stateOfPeace = new boolean[countOfPeace];
         this.lockState = new Object();
-<<<<<<< HEAD
-        
         this.countOfSold = 0;
-=======
-        // this.countOfSold = 0;
-        
->>>>>>> cb1b5ccd3e277e177043d1872d463557debd8eb3
         // Java will initialize the defaule value (false) of "stateOfPeace",
         // but we will do it (true) in the right direction.
         for (int i = 0; i < countOfPeace; i++) {
@@ -46,7 +39,6 @@ public class Seat {
         return result;
     }
     
-    /*
     private int trySealTick1(final int departure, final int arrival) {
         while (true) {
             boolean[] state = null;
@@ -90,35 +82,23 @@ public class Seat {
             this.stateOfPeace[i] = false;
         }
         return this.seatId;
-    } */
+    }
     
     private synchronized int trySealTick(final int departure, final int arrival) {
         
         boolean result = true;
         int _seatId = -1;
-<<<<<<< HEAD
-        
-        for (int i = departure - 1; i < arrival - 1; i++) {
-            result = result && this.stateOfPeace[i];
-        }
-        if (result == true) {
-=======
-        try {
-            this.isBusy = true;
->>>>>>> cb1b5ccd3e277e177043d1872d463557debd8eb3
+        // synchronized(lockState) {
             for (int i = departure - 1; i < arrival - 1; i++) {
-                this.stateOfPeace[i] = false;
+                result = result && this.stateOfPeace[i];
             }
-<<<<<<< HEAD
-        }
-        
+            if (result == true) {
+                for (int i = departure - 1; i < arrival - 1; i++) {
+                    this.stateOfPeace[i] = false;
+                }
+            }
+        // }
         return result ? this.seatId : _seatId;
-=======
-        } finally {
-            this.isBusy = false;
-            return result ? this.seatId : _seatId;
-        }
->>>>>>> cb1b5ccd3e277e177043d1872d463557debd8eb3
     }
     
     private int tryRefundTick(final int departure, final int arrival) {
