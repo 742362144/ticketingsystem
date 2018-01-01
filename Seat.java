@@ -53,7 +53,6 @@ public class Seat {
                 }
                 _seatId = this.seatId;
             }
-            
             return _seatId;
         } else {
             for (int i = departure - 1; i < arrival - 1; i++) {

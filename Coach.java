@@ -46,9 +46,9 @@ public class Coach {
             
             for (int i = 0; i < this.countOfSeat; i++) {
                 _seatId = this.allSeat[i].tryModifyState(departure, arrival, 0);
-                result = new CoachIdAndSeatId(this.coachId, _seatId); 
                 if (_seatId > 0) {
-                    result = null;
+                    result = new CoachIdAndSeatId(this.coachId, _seatId); 
+                    break;
                 }
             }
             
