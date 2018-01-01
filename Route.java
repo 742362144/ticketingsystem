@@ -8,11 +8,13 @@ public class Route {
     private final int countOfSeat;
     private final int countOfCoach;
     
-    private Coach[] allCoach;
+    // private Coach[] allCoach;
+    private List<Coach> allCoach;
     
     private volatile int countOfSoldTicket;
     
-    private volatile int countOfVisitor = 0;
+    // private volatile int countOfVisitor = 0;
+    private Random rand = new Random();
     
     public Route(final int routeId,
         final int countOfStation,
@@ -26,9 +28,11 @@ public class Route {
         
         this.countOfSoldTicket = 0;
         
-        this.allCoach = new Coach[countOfCoach];
+        // this.allCoach = new Coach[countOfCoach];
+        this.allCoach = new ArrayList<Coach>();
         for (int i = 0; i < countOfCoach; i++) {
-            this.allCoach[i] = new Coach(i + 1, countOfStation, countOfSeat);
+            // this.allCoach[i] = new Coach(i + 1, countOfStation, countOfSeat);
+            this.allCoach.add(new Coach(i + 1, countOfStation, countOfSeat));
         }
     }
     
@@ -36,7 +40,8 @@ public class Route {
         
         int freeCount = 0;
         for (int i = 0; i < countOfCoach; i++) {
-            freeCount += this.allCoach[i].checkFreeSeat(departure, arrival);
+            // freeCount += this.allCoach[i].checkFreeSeat(departure, arrival);
+            freeCount += this.allCoach.get(i).checkFreeSeat(departure, arrival);
         }
         return freeCount;
     }
@@ -46,13 +51,13 @@ public class Route {
         Ticket ticket = null;
         CoachIdAndSeatId result = null;
         
-        // Random rand = new Random();
         int i = 0;
-        // int j = rand.nextInt(this.countOfCoach);
-        int j = this.countOfVisitor % this.countOfCoach;
-        this.countOfVisitor++;
+        int j = this.rand.nextInt(this.countOfCoach);
+        // int j = this.countOfVisitor;
+        // this.countOfVisitor = (this.countOfVisitor + 1) % this.countOfCoach;
         while (i < this.countOfCoach) {
-            result = this.allCoach[j].trySeal(departure, arrival);
+            // result = this.allCoach[i].trySeal(departure, arrival);
+            result = this.allCoach.get(j).trySeal(departure, arrival);
             if (result != null) {
                 this.countOfSoldTicket += 1;
                 // Create a ticket.
@@ -76,7 +81,8 @@ public class Route {
     
     public boolean tryRefund(final int coachId, final int seatId, final int departure, final int arrival) {
         
-        this.allCoach[coachId - 1].tryRefund(departure, arrival, seatId);
+        // this.allCoach[coachId - 1].tryRefund(departure, arrival, seatId);
+        this.allCoach.get(coachId - 1).tryRefund(departure, arrival, seatId);
         return true;
     }
 }

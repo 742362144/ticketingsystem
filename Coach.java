@@ -18,7 +18,8 @@ public class Coach {
     private final int countOfSeat;
     private Seat[] allSeat;
     
-    private volatile int countOfVisitor = 0;
+    // private volatile int countOfVisitor = 0;
+    private Random rand = new Random();
     
     public Coach(final int coachId, final int countOfStation, final int countOfSeat) {
         
@@ -47,15 +48,14 @@ public class Coach {
         int _seatId = -1;
         CoachIdAndSeatId result = null;   
 
-        // Random rand = new Random();
         int i = 0;
-        int j = this.countOfVisitor % this.countOfSeat;
-        this.countOfVisitor++;
-        // int j = rand.nextInt(this.countOfSeat);
+        // int j = this.countOfVisitor;
+        // this.countOfVisitor = (this.countOfVisitor + 1) % this.countOfSeat;
+        int j = this.rand.nextInt(this.countOfSeat);
         while (i < this.countOfSeat) {
             _seatId = this.allSeat[j].trySealTick(departure, arrival);
             if (_seatId > 0) {
-                result = new CoachIdAndSeatId(this.coachId, _seatId); 
+                result = new CoachIdAndSeatId(this.coachId, _seatId);
                 break;
             }
             
