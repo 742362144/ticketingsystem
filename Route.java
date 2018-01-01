@@ -41,7 +41,9 @@ public class Route {
         
         Ticket ticket = null;
         CoachIdAndSeatId result = null;
-        for (int i = 0; i < countOfCoach; i++) {
+        
+        int i = 0;
+        while (i < countOfCoach) {
             result = this.allCoach[i].tryModifySeatState(departure, arrival, 0, 0);
             if (result != null) {
                 this.countOfSoldTicket += 1;
@@ -56,6 +58,8 @@ public class Route {
                 ticket.arrival = arrival;
                 break;
             }
+            
+            i++;
         }
                 
         return ticket;

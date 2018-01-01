@@ -16,6 +16,8 @@ public class Coach {
     private final int countOfSeat;
     private Seat[] allSeat;
     
+    public boolean isBusy = false;
+    
     public Coach(final int coachId, final int countOfStation, final int countOfSeat) {
         
         this.coachId = coachId;
@@ -42,14 +44,20 @@ public class Coach {
         
         if (SEAL_REFUND == 0) {
             int _seatId = -1;
-            CoachIdAndSeatId result = null;        
-            
-            for (int i = 0; i < this.countOfSeat; i++) {
+            CoachIdAndSeatId result = null; 
+
+            int i = 0;
+            while (i < this.countOfSeat) {
+                if (this.allSeat[i].isBusy) {
+                    i++;
+                    continue;
+                }
                 _seatId = this.allSeat[i].tryModifyState(departure, arrival, 0);
                 if (_seatId > 0) {
                     result = new CoachIdAndSeatId(this.coachId, _seatId); 
                     break;
                 }
+                i++;
             }
             
             return result;
