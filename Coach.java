@@ -1,6 +1,7 @@
 package ticketingsystem;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 class CoachIdAndSeatId {
     public int coachId;
@@ -19,7 +20,6 @@ public class Coach {
     private Seat[] allSeat;
     
     // private volatile int countOfVisitor = 0;
-    private Random rand = new Random();
     
     public Coach(final int coachId, final int countOfStation, final int countOfSeat) {
         
@@ -51,7 +51,7 @@ public class Coach {
         int i = 0;
         // int j = this.countOfVisitor;
         // this.countOfVisitor = (this.countOfVisitor + 1) % this.countOfSeat;
-        int j = this.rand.nextInt(this.countOfSeat);
+        int j = ThreadLocalRandom.current().nextInt(this.countOfSeat);
         while (i < this.countOfSeat) {
             _seatId = this.allSeat[j].trySealTick(departure, arrival);
             if (_seatId > 0) {

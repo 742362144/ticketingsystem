@@ -111,9 +111,9 @@ public class TestDesktop {
             // Convert millisecond to second.
             double timeused = (endTime - startTime) / 1000.0;
             // Then show the result.
-            System.out.println("Count of Threads: " + threadnum 
-                + "\tTime used: " + timeused 
-                + "\tThroughout: " + (testnum / timeused));
+            System.out.println("Count of Threads: " + threadnum
+                + "\tTime used: " + timeused
+                + "\tThroughout: " + (threadnum * testnum / timeused));
         }
                     
 	}

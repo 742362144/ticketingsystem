@@ -1,6 +1,7 @@
 package ticketingsystem;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Route {
     private final int routeId;
@@ -14,7 +15,6 @@ public class Route {
     private volatile int countOfSoldTicket;
     
     // private volatile int countOfVisitor = 0;
-    private Random rand = new Random();
     
     public Route(final int routeId,
         final int countOfStation,
@@ -52,7 +52,7 @@ public class Route {
         CoachIdAndSeatId result = null;
         
         int i = 0;
-        int j = this.rand.nextInt(this.countOfCoach);
+        int j = ThreadLocalRandom.current().nextInt(this.countOfCoach);
         // int j = this.countOfVisitor;
         // this.countOfVisitor = (this.countOfVisitor + 1) % this.countOfCoach;
         while (i < this.countOfCoach) {

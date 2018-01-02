@@ -7,6 +7,9 @@ public class Seat {
     private boolean[] stateOfPeace;
     
     private volatile int countOfSold;
+    // private volatile boolean isBusy = false;
+    
+    private Object lockState = new Object();
     
     public Seat(final int seatId, final int countOfPeace) {
         
@@ -32,19 +35,24 @@ public class Seat {
         return result;
     }
     
-    public synchronized int trySealTick(final int departure, final int arrival) {
+    // public synchronized int trySealTick(final int departure, final int arrival) {
+    public int trySealTick(final int departure, final int arrival) {
         
-        boolean result = true;
-        for (int i = departure - 1; i < arrival - 1; i++) {
-            result = result && this.stateOfPeace[i];
-        }
-        if (result == true) {
+        synchronized(lockState) {
+            boolean result = true;
             for (int i = departure - 1; i < arrival - 1; i++) {
-                this.stateOfPeace[i] = false;
+                result = result && this.stateOfPeace[i];
             }
-            return this.seatId;
-        } else {
-            return -1;
+            if (result == true) {
+                for (int i = departure - 1; i < arrival - 1; i++) {
+                    this.stateOfPeace[i] = false;
+                }
+
+                return this.seatId;
+            } else {
+
+                return -1;
+            }
         }
     }
     
