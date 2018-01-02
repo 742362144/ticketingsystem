@@ -113,7 +113,7 @@ public class TestServer {
             // Then show the result.
             System.out.println("Count of Threads: " + threadnum 
                 + "\tTime used: " + timeused 
-                + "\tThroughout: " + (testnum / timeused));
+                + "\tThroughout: " + (threadnum * testnum / timeused));
         }
                     
 	}
