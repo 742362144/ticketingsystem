@@ -1,3 +1,11 @@
+/*
+*
+* Coach.java
+* Guo Jianing
+* 2018-Jan-3th
+*
+*/
+
 package ticketingsystem;
 
 import java.util.*;
