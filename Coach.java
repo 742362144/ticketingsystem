@@ -36,7 +36,7 @@ public class Coach {
         
         int freeCount = 0;
         for (int i = 0; i < this.countOfSeat; i++) {
-            if (this.allSeat[i].checkState(departure, arrival)) {
+            if (this.allSeat[i].checkState1(departure, arrival)) {
                 freeCount++;
             }
         }
@@ -53,7 +53,7 @@ public class Coach {
         // this.countOfVisitor = (this.countOfVisitor + 1) % this.countOfSeat;
         int j = ThreadLocalRandom.current().nextInt(this.countOfSeat);
         while (i < this.countOfSeat) {
-            _seatId = this.allSeat[j].trySealTick(departure, arrival);
+            _seatId = this.allSeat[j].trySealTick1(departure, arrival);
             if (_seatId > 0) {
                 result = new CoachIdAndSeatId(this.coachId, _seatId);
                 break;
@@ -68,6 +68,6 @@ public class Coach {
     
     public boolean tryRefund(final int departure, final int arrival, final int seatId) {
         
-        return this.allSeat[seatId - 1].tryRefundTick(departure, arrival);
+        return this.allSeat[seatId - 1].tryRefundTick1(departure, arrival);
     }
 }
