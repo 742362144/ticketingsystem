@@ -44,13 +44,14 @@ public class TicketingDS implements TicketingSystem {
     public boolean refundTicket(Ticket ticket) {
         
         final int route = ticket.route;
-        final int coachId = ticket.coach;
+        /* final int coachId = ticket.coach;
         final int seatId = ticket.seat;
         final int departure = ticket.departure;
-        final int arrival = ticket.arrival;
+        final int arrival = ticket.arrival; */
         
         // return this.allRoutes[route - 1].tryRefund(coachId, seatId, departure, arrival);
-        return this.allRoutes.get(route - 1).tryRefund(coachId, seatId, departure, arrival);
+        // return this.allRoutes.get(route - 1).tryRefund(coachId, seatId, departure, arrival);
+        return this.allRoutes.get(route - 1).tryRefund1(ticket);
     }
 
 }

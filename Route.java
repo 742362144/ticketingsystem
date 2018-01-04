@@ -9,6 +9,7 @@ package ticketingsystem;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.*;
 
 public class Route {
     private final int routeId;
@@ -20,6 +21,9 @@ public class Route {
     private List<Coach> allCoach;
     
     private volatile int countOfSoldTicket;
+    
+    private Queue<Integer> queueOfSoldTicket 
+        = new ConcurrentLinkedQueue<Integer>();
     
     // private volatile int countOfVisitor = 0;
     
@@ -76,6 +80,10 @@ public class Route {
                 ticket.seat = result.seatId;
                 ticket.departure = departure;
                 ticket.arrival = arrival;
+                
+                Integer hashCodeOfTicket = new Integer(ticket.hashCode());
+                this.queueOfSoldTicket.add(hashCodeOfTicket);
+                // System.out.println("Bought: tid: " + ticket.tid + " hashCode: " + hashCodeOfTicket.intValue());
                 break;
             }
             
@@ -84,6 +92,21 @@ public class Route {
         }
                 
         return ticket;
+    }
+    
+    public boolean tryRefund1(final Ticket ticket) {
+        Integer hashCodeOfTicket = new Integer(ticket.hashCode());
+        // System.out.println("Refund: tid: " + ticket.tid + " hashCode: " + hashCodeOfTicket.intValue());
+        if (!this.queueOfSoldTicket.contains(hashCodeOfTicket)) {
+            return false;
+        } else {
+            this.queueOfSoldTicket.remove(hashCodeOfTicket);
+            final int coachId = ticket.coach;
+            final int seatId = ticket.seat;
+            final int departure = ticket.departure;
+            final int arrival = ticket.arrival;
+            return this.allCoach.get(coachId - 1).tryRefund(departure, arrival, seatId);
+        }
     }
     
     public boolean tryRefund(final int coachId, final int seatId, final int departure, final int arrival) {

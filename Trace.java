@@ -69,6 +69,10 @@ public class Trace {
             			if (0 <= sel && sel < retpc && soldTicket.size() > 0) { // return ticket
             				int select = rand.nextInt(soldTicket.size());
            				if ((ticket = soldTicket.remove(select)) != null) {
+                            // Add by jnk
+                            // ticket.passenger = "JNK";
+                            // ticket.tid = 0;
+                            // End of add
             					if (tds.refundTicket(ticket)) {
             						System.out.println("TicketRefund" + " " + ticket.tid + " " + ticket.passenger + " " + ticket.route + " " + ticket.coach  + " " + ticket.departure + " " + ticket.arrival + " " + ticket.seat);
             						System.out.flush();
