@@ -41,6 +41,11 @@ public class TestDesktop {
                 
             long startTime = System.currentTimeMillis();
             
+            System.out.println("TestDesktop: routenum: " + routenum +
+                " coachnum: " + coachnum +
+                " seatnum: " + seatnum +
+                " stationnum: " + stationnum);
+                
             for (int i = 0; i < threadnum; i++) {
                 // One thread simulates a user of our system.
                 threads[i] = new Thread(new Runnable() {
