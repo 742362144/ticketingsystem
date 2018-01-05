@@ -36,7 +36,7 @@ public class TestServer {
             " coachnum: " + coachnum +
             " seatnum: " + seatnum +
             " stationnum: " + stationnum +
-            "testnum: " + testnum + "/thread");
+            " testnum: " + testnum + "/thread");
         
         int length = threadnums.length;
         for (int j = 0; j < length; j++) {
