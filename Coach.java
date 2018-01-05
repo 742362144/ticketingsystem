@@ -2,7 +2,7 @@
 *
 * Coach.java
 * Guo Jianing
-* 2018-Jan-3th
+* 2018-Jan-5th
 *
 */
 
@@ -23,6 +23,7 @@ class CoachIdAndSeatId {
 }
 
 public class Coach {
+    private final boolean muchPeace;
     private final int coachId;
     private final int countOfSeat;
     private Seat[] allSeat;
@@ -30,6 +31,11 @@ public class Coach {
     // private volatile int countOfVisitor = 0;
     
     public Coach(final int coachId, final int countOfStation, final int countOfSeat) {
+        
+        // If there are more than 33 stations need to be operated,
+        // we will used "Seat.stateOfMuchPeace" instead "Seat.stateOfPeace",
+        // instead of operations to "Seat.stateOfPeace" are faster.
+        this.muchPeace = (countOfStation > 33);
         
         this.coachId = coachId;
         this.countOfSeat = countOfSeat;
@@ -43,9 +49,17 @@ public class Coach {
     public int checkFreeSeat(final int departure, final int arrival) {
         
         int freeCount = 0;
-        for (int i = 0; i < this.countOfSeat; i++) {
-            if (this.allSeat[i].checkState1(departure, arrival)) {
-                freeCount++;
+        if (this.muchPeace) {
+            for (int i = 0; i < this.countOfSeat; i++) {
+                if (this.allSeat[i].checkState(departure, arrival)) {
+                    freeCount++;
+                }
+            }
+        } else {
+            for (int i = 0; i < this.countOfSeat; i++) {
+                if (this.allSeat[i].checkState1(departure, arrival)) {
+                    freeCount++;
+                }
             }
         }
         return freeCount;
@@ -60,22 +74,40 @@ public class Coach {
         // int j = this.countOfVisitor;
         // this.countOfVisitor = (this.countOfVisitor + 1) % this.countOfSeat;
         int j = ThreadLocalRandom.current().nextInt(this.countOfSeat);
-        while (i < this.countOfSeat) {
-            _seatId = this.allSeat[j].trySealTick1(departure, arrival);
-            if (_seatId > 0) {
-                result = new CoachIdAndSeatId(this.coachId, _seatId);
-                break;
+        if (this.muchPeace) {
+            while (i < this.countOfSeat) {
+                _seatId = this.allSeat[j].trySealTick(departure, arrival);
+                if (_seatId > 0) {
+                    result = new CoachIdAndSeatId(this.coachId, _seatId);
+                    break;
+                }
+                
+                i++;
+                j = (j + 1) % this.countOfSeat;
             }
-            
-            i++;
-            j = (j + 1) % this.countOfSeat;
+        } else {
+            while (i < this.countOfSeat) {
+                _seatId = this.allSeat[j].trySealTick1(departure, arrival);
+                if (_seatId > 0) {
+                    result = new CoachIdAndSeatId(this.coachId, _seatId);
+                    break;
+                }
+                
+                i++;
+                j = (j + 1) % this.countOfSeat;
+            }
         }
         
         return result;
     }
     
     public boolean tryRefund(final int departure, final int arrival, final int seatId) {
-        
-        return this.allSeat[seatId - 1].tryRefundTick1(departure, arrival);
+        boolean result = false;
+        if (this.muchPeace) {
+            result = this.allSeat[seatId - 1].tryRefundTick(departure, arrival);
+        } else {
+            result = this.allSeat[seatId - 1].tryRefundTick1(departure, arrival);
+        }
+        return result;
     }
 }
