@@ -31,6 +31,12 @@ public class TestDesktop {
         // 60% asking is inquiring tickets.
         final int inqpc = 100;
         
+        System.out.println("TestDesktop: routenum: " + routenum +
+            " coachnum: " + coachnum +
+            " seatnum: " + seatnum +
+            " stationnum: " + stationnum +
+            " testnum: " + testnum + "/thread");
+        
         int length = threadnums.length;
         for (int j = 0; j < length; j++) {
             int threadnum = threadnums[j];
@@ -41,11 +47,6 @@ public class TestDesktop {
                 
             long startTime = System.currentTimeMillis();
             
-            System.out.println("TestDesktop: routenum: " + routenum +
-                " coachnum: " + coachnum +
-                " seatnum: " + seatnum +
-                " stationnum: " + stationnum);
-                
             for (int i = 0; i < threadnum; i++) {
                 // One thread simulates a user of our system.
                 threads[i] = new Thread(new Runnable() {

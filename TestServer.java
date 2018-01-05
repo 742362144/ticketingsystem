@@ -31,6 +31,13 @@ public class TestServer {
         // 60% asking is inquiring tickets.
         final int inqpc = 100;
         
+                
+        System.out.println("TestServer: routenum: " + routenum +
+            " coachnum: " + coachnum +
+            " seatnum: " + seatnum +
+            " stationnum: " + stationnum +
+            "testnum: " + testnum + "/thread");
+        
         int length = threadnums.length;
         for (int j = 0; j < length; j++) {
             int threadnum = threadnums[j];
@@ -38,11 +45,6 @@ public class TestServer {
             
             final TicketingDS tds = new TicketingDS(
                 routenum, coachnum, seatnum, stationnum, threadnum);
-                
-            System.out.println("TestDesktop: routenum: " + routenum +
-                " coachnum: " + coachnum +
-                " seatnum: " + seatnum +
-                " stationnum: " + stationnum);
                 
             long startTime = System.currentTimeMillis();
             
