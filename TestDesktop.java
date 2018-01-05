@@ -16,7 +16,7 @@ public class TestDesktop {
 	public static void main(String[] args) throws InterruptedException {
             
         // Data are used to define our system.
-        final int[] threadnums = { 1, 2, 4, 8, 16, 32, 64 };
+        final int[] threadnums = { 1, 2, 4, 8, 16, 32, 64, 128 };
         final int routenum = 5;
         final int coachnum = 8;
         final int seatnum = 100;

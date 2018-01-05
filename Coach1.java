@@ -1,6 +1,6 @@
 /*
 *
-* Coach.java
+* Coach1.java
 * Guo Jianing
 * 2018-Jan-5th
 *
@@ -11,53 +11,39 @@ package ticketingsystem;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-class CoachIdAndSeatId {
-    public int coachId;
-    public int seatId;
-    
-    public CoachIdAndSeatId(int _caochId, int _seatId) {
-        
-        this.coachId = _caochId;
-        this.seatId = _seatId;
-    }
-}
-
-public class Coach {
-    private final boolean muchPeace;
+public class Coach1 {
     private final int coachId;
     private final int countOfSeat;
-    private Seat[] allSeat;
+    private Seat1[] allSeat;
     
     // private volatile int countOfVisitor = 0;
     
-    public Coach(final int coachId, final int countOfStation, final int countOfSeat) {
+    public Coach1(final int coachId, final int countOfStation, final int countOfSeat) {
         
         // If there are more than 33 stations need to be operated,
         // we will used "Seat.stateOfMuchPeace" instead "Seat.stateOfPeace",
         // instead of operations to "Seat.stateOfPeace" are faster.
-        this.muchPeace = (countOfStation > 33);
-        
         this.coachId = coachId;
         this.countOfSeat = countOfSeat;
-        this.allSeat = new Seat[countOfSeat];
+        this.allSeat = new Seat1[countOfSeat];
         
         for (int i = 0; i < this.countOfSeat; i++) {
-            this.allSeat[i] = new Seat(i + 1, countOfStation - 1);
+            this.allSeat[i] = new Seat1(i + 1, countOfStation - 1);
         }
     }
     
-    public int checkFreeSeat(final int departure, final int arrival) {
+    public int checkFreeSeat1(final int departure, final int arrival) {
         
         int freeCount = 0;
         for (int i = 0; i < this.countOfSeat; i++) {
-            if (this.allSeat[i].checkState(departure, arrival)) {
+            if (this.allSeat[i].checkState1(departure, arrival)) {
                 freeCount++;
             }
         }
         return freeCount;
     }
     
-    public CoachIdAndSeatId trySeal(final int departure, final int arrival) {
+    public CoachIdAndSeatId trySeal1(final int departure, final int arrival) {
         
         int _seatId = -1;
         CoachIdAndSeatId result = null;   
@@ -66,9 +52,9 @@ public class Coach {
         // int j = this.countOfVisitor;
         // this.countOfVisitor = (this.countOfVisitor + 1) % this.countOfSeat;
         int j = ThreadLocalRandom.current().nextInt(this.countOfSeat);
-        
+
         while (i < this.countOfSeat) {
-            _seatId = this.allSeat[j].trySealTick(departure, arrival);
+            _seatId = this.allSeat[j].trySealTick1(departure, arrival);
             if (_seatId > 0) {
                 result = new CoachIdAndSeatId(this.coachId, _seatId);
                 break;
@@ -81,7 +67,7 @@ public class Coach {
         return result;
     }
     
-    public boolean tryRefund(final int departure, final int arrival, final int seatId) {
-        return this.allSeat[seatId - 1].tryRefundTick(departure, arrival);
+    public boolean tryRefund1(final int departure, final int arrival, final int seatId) {
+        return this.allSeat[seatId - 1].tryRefundTick1(departure, arrival);
     }
 }

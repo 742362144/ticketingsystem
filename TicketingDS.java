@@ -13,7 +13,7 @@ import java.util.*;
 public class TicketingDS implements TicketingSystem {
 		
 	// private Route[] allRoutes;
-    private final List<Route> allRoutes;
+    private final List<Train> allRoutes;
     
     public TicketingDS(int countOfRoute,
         int countOfCoach,
@@ -22,10 +22,18 @@ public class TicketingDS implements TicketingSystem {
         int countOfThread) {
         
         // this.allRoutes = new Route[countOfRoute];
-        this.allRoutes = new ArrayList<Route>();
-        for (int i = 0; i < countOfRoute; i++) {
-            // this.allRoutes[i] = new Route(i + 1, countOfStation, countOfCoach, countOfSeat);
-            allRoutes.add(new Route(i + 1, countOfStation, countOfCoach, countOfSeat));
+        if (countOfStation > 32) {
+            this.allRoutes = new ArrayList<Train>();
+            for (int i = 0; i < countOfRoute; i++) {
+                // this.allRoutes[i] = new Route(i + 1, countOfStation, countOfCoach, countOfSeat);
+                allRoutes.add(new Route(i + 1, countOfStation, countOfCoach, countOfSeat));
+            } 
+        } else {
+            this.allRoutes = new ArrayList<Train>();
+            for (int i = 0; i < countOfRoute; i++) {
+                // this.allRoutes[i] = new Route(i + 1, countOfStation, countOfCoach, countOfSeat);
+                allRoutes.add(new Route1(i + 1, countOfStation, countOfCoach, countOfSeat));
+            } 
         }
     }
     
@@ -51,7 +59,7 @@ public class TicketingDS implements TicketingSystem {
         
         // return this.allRoutes[route - 1].tryRefund(coachId, seatId, departure, arrival);
         // return this.allRoutes.get(route - 1).tryRefund(coachId, seatId, departure, arrival);
-        return this.allRoutes.get(route - 1).tryRefund1(ticket);
+        return this.allRoutes.get(route - 1).tryRefund(ticket);
     }
 
 }

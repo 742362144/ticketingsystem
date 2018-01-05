@@ -1,8 +1,8 @@
 /*
 *
-* Route.java
+* Route1.java
 * Guo Jianing
-* 2018-Jan-3th
+* 2018-Jan-5th
 *
 */
 package ticketingsystem;
@@ -11,20 +11,14 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.*;
 
-interface Train {
-    public int checkFreeSeat(final int departure, final int arrival);
-    public Ticket trySeal(final String name, final int departure, final int arrival);
-    public boolean tryRefund(final Ticket ticket);
-}
-
-public class Route implements Train {
+public class Route1 implements Train {
     private final int routeId;
     private final int countOfStation;
     private final int countOfSeat;
     private final int countOfCoach;
     
     // private Coach[] allCoach;
-    private List<Coach> allCoach;
+    private List<Coach1> allCoach;
     
     private volatile int countOfSoldTicket;
     
@@ -33,7 +27,7 @@ public class Route implements Train {
     
     // private volatile int countOfVisitor = 0;
     
-    public Route(final int routeId,
+    public Route1(final int routeId,
         final int countOfStation,
         final int countOfCoach,
         final int countOfSeat) {
@@ -46,10 +40,10 @@ public class Route implements Train {
         this.countOfSoldTicket = 0;
         
         // this.allCoach = new Coach[countOfCoach];
-        this.allCoach = new ArrayList<Coach>();
+        this.allCoach = new ArrayList<Coach1>();
         for (int i = 0; i < countOfCoach; i++) {
             // this.allCoach[i] = new Coach(i + 1, countOfStation, countOfSeat);
-            this.allCoach.add(new Coach(i + 1, countOfStation, countOfSeat));
+            this.allCoach.add(new Coach1(i + 1, countOfStation, countOfSeat));
         }
     }
     
@@ -58,7 +52,7 @@ public class Route implements Train {
         int freeCount = 0;
         for (int i = 0; i < countOfCoach; i++) {
             // freeCount += this.allCoach[i].checkFreeSeat(departure, arrival);
-            freeCount += this.allCoach.get(i).checkFreeSeat(departure, arrival);
+            freeCount += this.allCoach.get(i).checkFreeSeat1(departure, arrival);
         }
         return freeCount;
     }
@@ -74,7 +68,7 @@ public class Route implements Train {
         // this.countOfVisitor = (this.countOfVisitor + 1) % this.countOfCoach;
         while (i < this.countOfCoach) {
             // result = this.allCoach[i].trySeal(departure, arrival);
-            result = this.allCoach.get(j).trySeal(departure, arrival);
+            result = this.allCoach.get(j).trySeal1(departure, arrival);
             if (result != null) {
                 this.countOfSoldTicket += 1;
                 // Create a ticket.
@@ -111,7 +105,7 @@ public class Route implements Train {
             final int seatId = ticket.seat;
             final int departure = ticket.departure;
             final int arrival = ticket.arrival;
-            return this.allCoach.get(coachId - 1).tryRefund(departure, arrival, seatId);
+            return this.allCoach.get(coachId - 1).tryRefund1(departure, arrival, seatId);
         }
     }
 }
