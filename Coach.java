@@ -2,7 +2,7 @@
 *
 * Coach.java
 * Guo Jianing
-* 2018-Jan-5th
+* 2018-Jan-7th
 *
 */
 
@@ -23,26 +23,21 @@ class CoachIdAndSeatId {
 }
 
 public class Coach {
-    private final boolean muchPeace;
     private final int coachId;
     private final int countOfSeat;
     private Seat[] allSeat;
     
-    // private volatile int countOfVisitor = 0;
-    
-    public Coach(final int coachId, final int countOfStation, final int countOfSeat) {
+    public Coach(final int coachId, final int countOfSeat) {
         
         // If there are more than 33 stations need to be operated,
         // we will used "Seat.stateOfMuchPeace" instead "Seat.stateOfPeace",
         // instead of operations to "Seat.stateOfPeace" are faster.
-        this.muchPeace = (countOfStation > 33);
-        
         this.coachId = coachId;
         this.countOfSeat = countOfSeat;
         this.allSeat = new Seat[countOfSeat];
         
         for (int i = 0; i < this.countOfSeat; i++) {
-            this.allSeat[i] = new Seat(i + 1, countOfStation - 1);
+            this.allSeat[i] = new Seat(i + 1);
         }
     }
     
@@ -57,14 +52,13 @@ public class Coach {
         return freeCount;
     }
     
-    public CoachIdAndSeatId trySeal(final int departure, final int arrival) {
+    public CoachIdAndSeatId trySeal(final int departure,
+        final int arrival) {
         
         int _seatId = -1;
         CoachIdAndSeatId result = null;   
 
         int i = 0;
-        // int j = this.countOfVisitor;
-        // this.countOfVisitor = (this.countOfVisitor + 1) % this.countOfSeat;
         int j = ThreadLocalRandom.current().nextInt(this.countOfSeat);
         
         while (i < this.countOfSeat) {
@@ -81,7 +75,10 @@ public class Coach {
         return result;
     }
     
-    public boolean tryRefund(final int departure, final int arrival, final int seatId) {
-        return this.allSeat[seatId - 1].tryRefundTick(departure, arrival);
+    public boolean tryRefund(final int departure,
+        final int arrival, final int seatId) {
+            
+        return this.allSeat[seatId - 1]
+            .tryRefundTick(departure, arrival);
     }
 }

@@ -118,9 +118,7 @@ public class TestServer {
             // Convert millisecond to second.
             double timeused = (endTime - startTime) / 1000.0;
             // Then show the result.
-            System.out.println("Count of Threads: " + threadnum 
-                + "\tTime used: " + timeused 
-                + "\tThroughout: " + (threadnum * testnum / timeused));
+            System.out.format("CountOfThreads: %3d TimeUsed: %3.2fs Throughout: %.2f%n", threadnum, timeused, (threadnum * testnum / timeused));
         }
                     
 	}

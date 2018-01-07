@@ -2,36 +2,23 @@
 *
 * Route.java
 * Guo Jianing
-* 2018-Jan-3th
+* 2018-Jan-7th
 *
 */
 package ticketingsystem;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
-interface Train {
-    public int checkFreeSeat(final int departure, final int arrival);
-    public Ticket trySeal(final String name, final int departure, final int arrival);
-    public boolean tryRefund(final Ticket ticket);
-}
-
-public class Route implements Train {
+public class Route {
     private final int routeId;
-    private final int countOfStation;
     private final int countOfSeat;
     private final int countOfCoach;
     
-    // private Coach[] allCoach;
     private List<Coach> allCoach;
-    
-    private volatile int countOfSoldTicket;
-    
-    private Queue<Integer> queueOfSoldTicket 
-        = new ConcurrentLinkedQueue<Integer>();
-    
-    // private volatile int countOfVisitor = 0;
+    private AtomicInteger countOfSoldTicket;
+    private Queue<Integer> queueOfSoldTicket;
     
     public Route(final int routeId,
         final int countOfStation,
@@ -39,47 +26,49 @@ public class Route implements Train {
         final int countOfSeat) {
         
         this.routeId = routeId;
-        this.countOfStation = countOfStation;
         this.countOfSeat = countOfSeat;
         this.countOfCoach = countOfCoach;
         
-        this.countOfSoldTicket = 0;
+        this.countOfSoldTicket = new AtomicInteger(0);
+        this.queueOfSoldTicket = 
+            new ConcurrentLinkedQueue<Integer>();
         
-        // this.allCoach = new Coach[countOfCoach];
         this.allCoach = new ArrayList<Coach>();
         for (int i = 0; i < countOfCoach; i++) {
-            // this.allCoach[i] = new Coach(i + 1, countOfStation, countOfSeat);
-            this.allCoach.add(new Coach(i + 1, countOfStation, countOfSeat));
+            this.allCoach.add(new Coach(i + 1, countOfSeat));
         }
     }
     
-    public int checkFreeSeat(final int departure, final int arrival) {
+    public int checkFreeSeat(final int departure, 
+        final int arrival) {
         
         int freeCount = 0;
         for (int i = 0; i < countOfCoach; i++) {
-            // freeCount += this.allCoach[i].checkFreeSeat(departure, arrival);
-            freeCount += this.allCoach.get(i).checkFreeSeat(departure, arrival);
+            freeCount += this.allCoach.get(i)
+                .checkFreeSeat(departure, arrival);
         }
         return freeCount;
     }
     
-    public Ticket trySeal(final String name, final int departure, final int arrival) {
+    public Ticket trySeal(final String name, 
+        final int departure, final int arrival) {
         
         Ticket ticket = null;
         CoachIdAndSeatId result = null;
         
         int i = 0;
-        int j = ThreadLocalRandom.current().nextInt(this.countOfCoach);
-        // int j = this.countOfVisitor;
-        // this.countOfVisitor = (this.countOfVisitor + 1) % this.countOfCoach;
+        int j = ThreadLocalRandom.current()
+            .nextInt(this.countOfCoach);
+            
         while (i < this.countOfCoach) {
-            // result = this.allCoach[i].trySeal(departure, arrival);
             result = this.allCoach.get(j).trySeal(departure, arrival);
+                
             if (result != null) {
-                this.countOfSoldTicket += 1;
                 // Create a ticket.
                 ticket = new Ticket();
-                ticket.tid = this.routeId * 10000 + this.countOfSoldTicket;
+                
+                ticket.tid = this.routeId * 1000000
+                    + this.countOfSoldTicket.getAndIncrement();
                 ticket.passenger = name;
                 ticket.route = this.routeId;
                 ticket.coach = result.coachId;
@@ -87,9 +76,9 @@ public class Route implements Train {
                 ticket.departure = departure;
                 ticket.arrival = arrival;
                 
-                Integer hashCodeOfTicket = new Integer(ticket.hashCode());
-                this.queueOfSoldTicket.add(hashCodeOfTicket);
-                // System.out.println("Bought: tid: " + ticket.tid + " hashCode: " + hashCodeOfTicket.intValue());
+                this.queueOfSoldTicket.add(
+                    new Integer(ticket.hashCode()));
+                
                 break;
             }
             
@@ -101,8 +90,8 @@ public class Route implements Train {
     }
     
     public boolean tryRefund(final Ticket ticket) {
+        
         Integer hashCodeOfTicket = new Integer(ticket.hashCode());
-        // System.out.println("Refund: tid: " + ticket.tid + " hashCode: " + hashCodeOfTicket.intValue());
         if (!this.queueOfSoldTicket.contains(hashCodeOfTicket)) {
             return false;
         } else {
@@ -111,7 +100,9 @@ public class Route implements Train {
             final int seatId = ticket.seat;
             final int departure = ticket.departure;
             final int arrival = ticket.arrival;
-            return this.allCoach.get(coachId - 1).tryRefund(departure, arrival, seatId);
+            
+            return this.allCoach.get(coachId - 1).
+                tryRefund(departure, arrival, seatId);
         }
     }
 }

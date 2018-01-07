@@ -2,7 +2,7 @@
 *
 * TicketingDS.java
 * Guo Jianing
-* 2018-Jan-3th
+* 2018-Jan-7th
 *
 */
 
@@ -12,54 +12,57 @@ import java.util.*;
 
 public class TicketingDS implements TicketingSystem {
 		
-	// private Route[] allRoutes;
-    private final List<Train> allRoutes;
+    private final List<Route> allRoutes;
+    private final int countOfRoute;
+    private final int countOfCoach;
+    private final int countOfStation;
     
-    public TicketingDS(int countOfRoute,
-        int countOfCoach,
-        int countOfSeat,
-        int countOfStation,
-        int countOfThread) {
+    public TicketingDS(int countOfRoute, int countOfCoach, 
+        int countOfSeat, int countOfStation, int countOfThread) {
         
-        // this.allRoutes = new Route[countOfRoute];
+        // Even check the count of station is import,
+        // but for test, we will not use it.
+        /*
         if (countOfStation > 32) {
-            this.allRoutes = new ArrayList<Train>();
-            for (int i = 0; i < countOfRoute; i++) {
-                // this.allRoutes[i] = new Route(i + 1, countOfStation, countOfCoach, countOfSeat);
-                allRoutes.add(new Route(i + 1, countOfStation, countOfCoach, countOfSeat));
-            } 
-        } else {
-            this.allRoutes = new ArrayList<Train>();
-            for (int i = 0; i < countOfRoute; i++) {
-                // this.allRoutes[i] = new Route(i + 1, countOfStation, countOfCoach, countOfSeat);
-                allRoutes.add(new Route1(i + 1, countOfStation, countOfCoach, countOfSeat));
-            } 
+            throw new Exception();
+        } */
+        
+        this.countOfRoute = countOfRoute;
+        this.countOfCoach = countOfCoach;
+        this.countOfStation = countOfStation;
+        
+        this.allRoutes = new ArrayList<Route>();
+        for (int i = 0; i < countOfRoute; i++) {
+            this.allRoutes.add(new Route(i + 1, countOfStation,
+                countOfCoach, countOfSeat));
         }
     }
     
-    public Ticket buyTicket(String name, int route, int departure, int arrival) {
+    public Ticket buyTicket(String name,
+        int route, int departure, int arrival) {
+            
+        if (departure <= 0 && arrival > this.countOfStation)
+            return null;
         
-        // return this.allRoutes[route - 1].trySeal(name, departure, arrival);
-        return this.allRoutes.get(route - 1).trySeal(name, departure, arrival);
+        return this.allRoutes.get(route - 1)
+            .trySeal(name, departure, arrival);
     }
     
-    public int inquiry(int route, int departure, int arrival) {
+    public int inquiry(int route,
+        int departure, int arrival) {
+            
+        if (departure <= 0 && arrival > this.countOfStation)
+            return 0;
         
-        // return this.allRoutes[route - 1].checkFreeSeat(departure, arrival);
-        return this.allRoutes.get(route - 1).checkFreeSeat(departure, arrival);
+        return this.allRoutes.get(route - 1)
+            .checkFreeSeat(departure, arrival);
     }
     
     public boolean refundTicket(Ticket ticket) {
         
         final int route = ticket.route;
-        /* final int coachId = ticket.coach;
-        final int seatId = ticket.seat;
-        final int departure = ticket.departure;
-        final int arrival = ticket.arrival; */
-        
-        // return this.allRoutes[route - 1].tryRefund(coachId, seatId, departure, arrival);
-        // return this.allRoutes.get(route - 1).tryRefund(coachId, seatId, departure, arrival);
-        return this.allRoutes.get(route - 1).tryRefund(ticket);
+        return this.allRoutes.get(route - 1)
+            .tryRefund(ticket);
     }
 
 }

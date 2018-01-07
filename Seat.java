@@ -2,7 +2,7 @@
 *
 * Seat.java
 * Guo Jianing
-* 2018-Jan-5th
+* 2018-Jan-7th
 *
 */
 
@@ -13,57 +13,68 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Seat {
     private final int seatId;
-    private boolean[] stateOfMuchPeace = null;
+    private AtomicInteger stateOfPeace;
     
-    public Seat(final int seatId, final int countOfPeace) {
+    public Seat(final int seatId) {
         
         this.seatId = seatId;
-        
         // If there are more than 33 stations need to be operated,
         // we will used "stateOfMuchPeace" instead "stateOfPeace",
         // instead of operations to "stateOfPeace" are faster.
-        this.stateOfMuchPeace = new boolean[countOfPeace];
-        for (int i = 0; i < countOfPeace; i++) {
-            this.stateOfMuchPeace[i] = true;
-        }
+        this.stateOfPeace = new AtomicInteger(0);
     }
     
     public boolean checkState(final int departure, final int arrival) {
-        
-        boolean result = true;
-        // The result may not be right,
-        // cause "tryModifyState()" could change the states of this seat
-        // when we are running "checkState()".
+        int expect = this.stateOfPeace.get();
+        int temp = 0;
         for (int i = departure - 1; i < arrival - 1; i++) {
-            result = result && this.stateOfMuchPeace[i];
+            int pow = 1;
+            pow = pow << i;
+            temp += pow;
         }
-        return result;
+        int result = temp & expect;
+        
+        return (result != 0) ? false : true;
     }
     
-    public synchronized int trySealTick(final int departure, final int arrival) {
+    public int trySealTick(final int departure, final int arrival) {
         
-        boolean result = true;
-        for (int i = departure - 1; i < arrival - 1; i++) {
-            result = result && this.stateOfMuchPeace[i];
-        }
-        if (result == true) {
+        int expect = 0;
+        int update = 0;
+        do {
+            expect = this.stateOfPeace.get();
+            int temp = 0;
             for (int i = departure - 1; i < arrival - 1; i++) {
-                this.stateOfMuchPeace[i] = false;
+                int pow = 1;
+                pow = pow << i;
+                temp += pow;
             }
-            return this.seatId;
-        } else {
-            return -1;
-        }
+            int result = temp & expect;
+            if (result != 0) {
+                return -1;
+            } else {
+                update = temp | expect;
+            }
+        } while (!this.stateOfPeace.compareAndSet(expect, update));
+        
+        return this.seatId;
     }
     
-    public synchronized boolean tryRefundTick(final int departure, final int arrival) {
+    public boolean tryRefundTick(final int departure, final int arrival) {
         
-        // We don't need lock the state when refund tickets,
-        // cause when we could sell a ticket without refunding,
-        // we can make it after refunding also.
-        for (int i = departure - 1; i < arrival - 1; i++) {
-            this.stateOfMuchPeace[i] = true;
-        }
+        int expect = 0;
+        int update = 0;
+        do {
+            expect = this.stateOfPeace.get();
+            int temp = 0;
+            for (int i = departure - 1; i < arrival - 1; i++) {
+                int pow = 1;
+                pow = pow << i;
+                temp += pow;
+            }
+            update = (~temp) & expect;
+        } while (!this.stateOfPeace.compareAndSet(expect, update));
+        
         return true;
     }
 }

@@ -16,7 +16,7 @@ public class TestDesktop {
 	public static void main(String[] args) throws InterruptedException {
             
         // Data are used to define our system.
-        final int[] threadnums = { 1, 2, 4, 8, 16, 32, 64, 128 };
+        final int[] threadnums = { 1, 2, 4, 8, 16, 32 };
         final int routenum = 5;
         final int coachnum = 8;
         final int seatnum = 100;
@@ -117,9 +117,7 @@ public class TestDesktop {
             // Convert millisecond to second.
             double timeused = (endTime - startTime) / 1000.0;
             // Then show the result.
-            System.out.println("Count of Threads: " + threadnum
-                + "\tTime used: " + timeused
-                + "\tThroughout: " + (threadnum * testnum / timeused));
+            System.out.format("CountOfThreads: %3d TimeUsed: %3.2fs Throughout: %.2f%n", threadnum, timeused, (threadnum * testnum / timeused));
         }
                     
 	}

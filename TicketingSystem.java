@@ -2,7 +2,7 @@
 *
 * TicketingDS.java
 * Guo Jianing
-* 2018-Jan-4th
+* 2018-Jan-7th
 *
 */
 
@@ -20,6 +20,8 @@ class Ticket{
     @Override
     public boolean equals(Object o) {
         
+        // We will not use this "equals()" method to check
+        // validity of tickets for performace reason.
         if (o == this) return true;
         if (!(o instanceof Ticket)) {
             return false;
@@ -52,7 +54,10 @@ class Ticket{
 
 
 public interface TicketingSystem {
-	Ticket buyTicket(String passenger, int route, int departure, int arrival);
+    
+	Ticket buyTicket(String passenger, 
+        int route, int departure, int arrival);
+        
 	int inquiry(int route, int departure, int arrival);
 	boolean refundTicket(Ticket ticket);
 }
