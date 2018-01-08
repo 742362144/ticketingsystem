@@ -16,7 +16,7 @@ public class TestDesktop {
 	public static void main(String[] args) throws InterruptedException {
             
         // Data are used to define our system.
-        final int[] threadnums = { 1, 2, 4, 8, 16, 32 };
+        final int[] threadnums = { 1, 2, 4, 8, 16 };
         final int routenum = 5;
         final int coachnum = 8;
         final int seatnum = 100;
@@ -31,7 +31,7 @@ public class TestDesktop {
         // 60% asking is inquiring tickets.
         final int inqpc = 100;
         
-        System.out.println("TestDesktop: routenum: " + routenum +
+        System.out.println("TestDesktop: \nroutenum: " + routenum +
             " coachnum: " + coachnum +
             " seatnum: " + seatnum +
             " stationnum: " + stationnum +

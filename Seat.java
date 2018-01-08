@@ -41,14 +41,14 @@ public class Seat {
         
         int expect = 0;
         int update = 0;
+        int temp = 0;
+        for (int i = departure - 1; i < arrival - 1; i++) {
+            int pow = 1;
+            pow = pow << i;
+            temp += pow;
+        }
         do {
             expect = this.stateOfPeace.get();
-            int temp = 0;
-            for (int i = departure - 1; i < arrival - 1; i++) {
-                int pow = 1;
-                pow = pow << i;
-                temp += pow;
-            }
             int result = temp & expect;
             if (result != 0) {
                 return -1;
@@ -64,14 +64,14 @@ public class Seat {
         
         int expect = 0;
         int update = 0;
+        int temp = 0;
+        for (int i = departure - 1; i < arrival - 1; i++) {
+            int pow = 1;
+            pow = pow << i;
+            temp += pow;
+        }
         do {
             expect = this.stateOfPeace.get();
-            int temp = 0;
-            for (int i = departure - 1; i < arrival - 1; i++) {
-                int pow = 1;
-                pow = pow << i;
-                temp += pow;
-            }
             update = (~temp) & expect;
         } while (!this.stateOfPeace.compareAndSet(expect, update));
         
